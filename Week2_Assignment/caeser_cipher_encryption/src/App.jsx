@@ -1,5 +1,5 @@
-import { CeaserCipher } from "./CeaserCipher";
+import { CaesarCipher } from "./CeaserCipher";
 
 export default function App() {
-  return <CeaserCipher />;
+  return <CaesarCipher />;
 }

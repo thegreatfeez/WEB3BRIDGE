@@ -4,3 +4,7 @@ function gcd(x, y) {
     }
     return x;
 }
+
+const x = 16261;
+const y = 85652;
+console.log("gcd =", gcd(x, y));

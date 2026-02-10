@@ -1,19 +1,36 @@
 import React, { useState } from "react";
 
-export function CeaserCipher() {
+export function CaesarCipher() {
   const [userInput, setUserInput] = useState("");
   const [encryptionKey, setEncryptionKey] = useState("0");
   const [encryptedText, setEncryptedText] = useState("");
   const [decryptedText, setDecryptedText] = useState("");
+
+  const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+  const shiftChar = (char, key) => {
+    const upperChar = char.toUpperCase();
+    const index = ALPHABET.indexOf(upperChar);
+    
+    
+    if (index === -1) {
+      return char;
+    }
+    
+    
+    const shiftedIndex = (index + key) % 26;
+   
+    const finalIndex = shiftedIndex < 0 ? shiftedIndex + 26 : shiftedIndex;
+    
+    return ALPHABET[finalIndex];
+  };
 
   const handleEncryption = () => {
     const key = Number(encryptionKey) || 0;
     let nextEncrypted = "";
 
     for (const char of userInput) {
-      const charCode = char.charCodeAt(0);
-      const encryptedChar = String.fromCharCode(charCode + key);
-      nextEncrypted += encryptedChar;
+      nextEncrypted += shiftChar(char, key);
     }
 
     setEncryptedText(nextEncrypted);
@@ -26,9 +43,7 @@ export function CeaserCipher() {
     let nextDecrypted = "";
 
     for (const char of source) {
-      const charCode = char.charCodeAt(0);
-      const decryptedChar = String.fromCharCode(charCode - key);
-      nextDecrypted += decryptedChar;
+      nextDecrypted += shiftChar(char, -key);
     }
 
     setDecryptedText(nextDecrypted);
