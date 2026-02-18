@@ -20,8 +20,11 @@ contract SaveEther {
 
  
     function deposit() external payable {
+        // require(msg.sender != address(0), "Address zero detected");
         require(msg.value > 0, "Can't deposit zero value");
+
         balances[msg.sender] = balances[msg.sender] + msg.value;
+
         emit DepositSuccessful(msg.sender, msg.value);
     }
 
@@ -39,21 +42,26 @@ contract SaveEther {
     }
 
    
+  
     function withdraw(uint256 _amount) external {
         require(msg.sender != address(0), "Address zero detected");
-        require(_amount > 0, "Can't withdraw zero value");
 
+        // the balance mapping is a key to value pair, if the key is
+        // provided it retuns the value at that location.
+        //
         uint256 userSavings_ = balances[msg.sender];
-        require(userSavings_ >= _amount, "Insufficient funds");
+
+        require(userSavings_ > 0, "Insufficient funds");
 
         balances[msg.sender] = userSavings_ - _amount;
 
+        // (bool result,) = msg.sender.call{value: msg.value}("");
         (bool result, bytes memory data) = payable(msg.sender).call{value: _amount}("");
+
         require(result, "transfer failed");
 
         emit WithdrawalSuccessful(msg.sender, _amount, data);
     }
-
    
     function withdrawToken(uint256 _amount) external {
         require(msg.sender != address(0), "Address zero detected");
