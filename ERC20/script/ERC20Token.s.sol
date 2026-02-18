@@ -13,7 +13,7 @@ contract CounterScript is Script {
     function run() public {
         vm.startBroadcast();
 
-        token = new ERC20Token();
+        token = new ERC20Token("MyToken", "MTK", 18, 1000000 ether);
 
         vm.stopBroadcast();
     }

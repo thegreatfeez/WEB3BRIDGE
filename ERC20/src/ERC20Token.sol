@@ -7,16 +7,24 @@ contract ERC20Token {
     error ERC20Token__InsufficientAllowance();
     error ERC20Token__ResetAllowanceFirst();
 
-    string public tokenName = "BorronToken";
-    uint8 public tokenDecimal = 18;
-    string public tokenSymbol = "BRT";
-    uint256 public tokenSupply = 1000_000e18;
+    string public tokenName;
+    uint8 public tokenDecimal;
+    string public tokenSymbol;
+    uint256 public tokenSupply;
 
     mapping(address => uint256) balances;
     mapping(address => mapping(address => uint256)) allowances;
 
     event Transfer(address indexed from, address indexed to, uint256 amount);
     event Approval(address indexed sender, address indexed spender, uint256 value);
+
+    constructor(string memory _name, string memory _symbol, uint8 _decimal, uint256 _supply) {
+        tokenName = _name;
+        tokenSymbol = _symbol;
+        tokenDecimal = _decimal;
+        tokenSupply = _supply;
+        balances[msg.sender] = _supply;
+    }
 
     function name() public view returns (string memory) {
         return tokenName;
