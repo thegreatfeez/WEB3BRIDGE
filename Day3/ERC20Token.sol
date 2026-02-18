@@ -43,7 +43,7 @@ contract ERC20Token {
     }
 
     function balanceOf(address _owner) public view returns (uint256) {
-        if (_owner != address(0)) revert ERC20Token__InvalidAddress();
+        if (_owner == address(0)) revert ERC20Token__InvalidAddress();
         return balances[_owner];
     }
 
