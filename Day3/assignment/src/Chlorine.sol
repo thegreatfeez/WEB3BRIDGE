@@ -10,11 +10,11 @@ interface IERC20{
 contract Chlorine{
     IERC20 public paymentToken;
 
-    mapping(uint => uint) public studentLevel;
+    mapping(uint16 => uint256) public studentLevel;
 
    uint256 private constant SALARY = 5000e18;
 
-    address owner;
+    address public owner;
 
     constructor(address _tokenAddress){
         studentLevel[100] = 1000e18;
@@ -25,8 +25,6 @@ contract Chlorine{
     
         paymentToken = IERC20(_tokenAddress);
         owner = msg.sender;
-
-
     }
 
     modifier OnlyOwner() {
@@ -34,10 +32,15 @@ contract Chlorine{
         _;
     }
 
+   
+    enum StaffPaymentStatus  { NotPaid, Paid }
+    enum StudentRegStatus    { NotRegistered, Registered }
+   
+
     struct Student{
         uint8 id;
         string name;
-        uint8 level;
+        uint16 level;
     }
 
     struct Staff{
@@ -52,8 +55,16 @@ contract Chlorine{
     uint8 staff_id;
     uint8 student_id;
 
+   
+    mapping(uint8 => StaffPaymentStatus)  public staffPaymentStatus;
+    mapping(uint8 => uint256)             public staffLastPaid;
+    mapping(address => StudentRegStatus)  public studentRegStatus;
+
+    uint256 private constant PAY_INTERVAL = 14 days;
+    
+
     function addStaff(string memory _name, address _account) external {
-        require(_account != address(0), "Inalid Account");
+        require(_account != address(0), "Invalid Account");
 
         staff_id = staff_id + 1;
         Staff memory staff = Staff({id: staff_id, name: _name, account: _account});
@@ -69,7 +80,21 @@ contract Chlorine{
             }
         }
         require(staffAccount != address(0), "Staff Not Found");
+
+       
+        require(
+            staffPaymentStatus[_id] == StaffPaymentStatus.NotPaid ||
+            block.timestamp >= staffLastPaid[_id] + PAY_INTERVAL,
+            "Staff already paid within the last 14 days"
+        );
+      
+
         require(paymentToken.balanceOf(address(this)) >= SALARY, "Insufficient Fund");
+
+      
+        staffPaymentStatus[_id] = StaffPaymentStatus.Paid;
+        staffLastPaid[_id]      = block.timestamp;
+       
 
         paymentToken.transfer(staffAccount, SALARY);
     }
@@ -78,11 +103,18 @@ contract Chlorine{
         return staffs;
     }
 
-    function registerStudent(string memory _name, uint8 _level) external {
+    function registerStudent(string memory _name, uint16 _level) external {
         require(
             _level == 100 || _level == 200 || _level == 300 || _level == 400,
             "Invalid level: must be 100, 200, 300, or 400"
         );
+
+        
+        require(
+            studentRegStatus[msg.sender] == StudentRegStatus.NotRegistered,
+            "Address already registered as a student"
+        );
+        
 
         uint256 fee = studentLevel[_level];
         require(fee > 0, "Fee not set for this level");
@@ -90,6 +122,10 @@ contract Chlorine{
        
         bool success = paymentToken.transferFrom(msg.sender, address(this), fee);
         require(success, "Fee payment failed");
+
+        
+        studentRegStatus[msg.sender] = StudentRegStatus.Registered;
+        
 
         student_id = student_id + 1;
         Student memory student = Student({
