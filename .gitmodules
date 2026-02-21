@@ -1,3 +1,0 @@
-[submodule "Cyfrin-solidity/foundry-f23/lib/forge-std"]
-	path = Cyfrin-solidity/foundry-f23/lib/forge-std
-	url = https://github.com/foundry-rs/forge-std
