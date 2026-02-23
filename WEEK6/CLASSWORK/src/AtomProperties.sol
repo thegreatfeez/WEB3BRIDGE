@@ -15,13 +15,14 @@ contract AtomProperties {
         string location;
         uint256 price;
         bool forSale;
+        bool isSold;
         address owner;
     }
 
-    IERC20 public paymentToken;
+    IERC20 public LitiumToken;
 
     constructor(address _tokenAddress) {
-        paymentToken = IERC20(_tokenAddress);
+        LitiumToken = IERC20(_tokenAddress);
     }
 
     function getIndex(uint8 _id) internal view returns (uint8) {
@@ -43,7 +44,7 @@ contract AtomProperties {
     function addProperty(string memory _name, string memory _location, uint256 _price) external {
         if (_price == 0) revert PriceMustBeGreaterThanZero();
         property_id = property_id + 1;
-        properties.push(Property(property_id, _name, _location, _price, true, msg.sender));
+        properties.push(Property(property_id, _name, _location, _price, true, false, msg.sender));
     }
 
     function removeProperty(uint8 _id) external onlyPropertyOwner(_id) {
@@ -52,7 +53,18 @@ contract AtomProperties {
         properties.pop();
     }
 
-   
+    function purchaseProperty(uint8 _id) external {
+         for (uint8 i; i < properties.length; i++) {
+            if (_id == properties[i].id){
+                address ownerAddress = properties[i].owner;
+                uint256 price = properties[i].price;
+                LitiumToken.transferFrom(msg.sender, ownerAddress , price);
+                properties[i].isSold = true;
+                properties[i].owner = msg.sender;
+            }
+            
+        }
+    }
 
     function getAllProperties() external view returns (Property[] memory) {
         return properties;
