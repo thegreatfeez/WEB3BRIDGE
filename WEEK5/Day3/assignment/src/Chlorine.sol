@@ -8,7 +8,7 @@ interface IERC20{
 }
 
 contract Chlorine{
-    IERC20 public paymentToken;
+    IERC20 public immutable paymentToken;
 
     mapping(uint16 => uint256) public studentLevel;
 
@@ -106,7 +106,7 @@ contract Chlorine{
         paymentToken.transfer(staffAccount, SALARY);
     }
 
-    function suspendStaff(address _account) external {
+    function suspendStaff(address _account) external OnlyOwner() {
         bool found = false;
          for(uint i = 0; i < staffs.length; i++){
              if(_account == staffs[i].account){
@@ -155,7 +155,7 @@ contract Chlorine{
         students.push(student);
     }
 
-    function removeStudent(uint8 _id) external {
+    function removeStudent(uint8 _id) external OnlyOwner(){
         for (uint i; i < students.length; i++){
             if(students[i].id == _id){
                 students[i] = students[(students.length) - 1];

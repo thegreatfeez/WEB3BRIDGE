@@ -23,7 +23,7 @@ contract ChlorineTest is Test {
 
         chlorine.addStaff(name, account);
 
-        (uint8 id, string memory staffName, address staffAccount)= chlorine.staffs(0);
+        (uint8 id, string memory staffName, address staffAccount, )= chlorine.staffs(0);
         assertEq(id, 1);
         assertEq(staffName, name);
         assertEq(staffAccount, account);
