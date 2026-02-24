@@ -1,19 +1,17 @@
-import {
-  time,
-  loadFixture,
-} from "@nomicfoundation/hardhat-toolbox/network-helpers";
-import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
-import hre from "hardhat";
+import { ethers } from "hardhat";
 
 describe("SaveAsset", function () {
-    let saveAsset, token, owner, user;
+    let saveAsset: any;
+    let token: any;
+    let owner: any;
+    let user: any;
 
     beforeEach(async function () {
         [owner, user] = await ethers.getSigners();
 
-        const Token = await ethers.getContractFactory("ERC20Mock");
-        token = await Token.deploy("MockToken", "MTK", ethers.parseEther("1000"));
+        const Token = await ethers.getContractFactory("ERC20Token");
+        token = await Token.deploy("MilwalToken", "MTK", 18, ethers.parseEther("1000"));
         await token.waitForDeployment();
 
         const SaveAsset = await ethers.getContractFactory("SaveAsset");
@@ -26,7 +24,6 @@ describe("SaveAsset", function () {
         await saveAsset.connect(user).deposit({ value: amount });
         expect(await saveAsset.connect(user).getUserSavings()).to.equal(amount);
     });
-
     it("should revert deposit with zero value", async function () {
         await expect(saveAsset.connect(user).deposit({ value: 0 })).to.be.revertedWith("Can't deposit zero value");
     });
