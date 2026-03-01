@@ -2,13 +2,13 @@
 <details>
   <summary>SwapExactTokensForTokens</summary>
 
-  ![Alt text](images/swapExactTokensForTokens.png)
+  <img src="images/swapExactTokensForTokens.png" alt="SwapExactTokensForTokens"/>
 
 </details>
 
 <details>
   <summary>SwapTokensForExactTokens</summary>
 
-  ![Alt text](images/swapTokensForExactTokens.png)
+  <img src="images/swapTokensForExactTokens.png" alt="SwapTokensForExactTokens"/>
 
 </details>
