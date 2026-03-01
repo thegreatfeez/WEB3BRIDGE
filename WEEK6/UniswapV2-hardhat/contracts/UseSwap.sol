@@ -9,6 +9,7 @@ contract UseSwap {
     address public owner;
     uint public swapCount;
     uint public swapCountToken;
+    uint public swapCountExactETH;
     uint public liquidityCount;
 
 
@@ -61,6 +62,25 @@ contract UseSwap {
         );
 
         swapCountToken += 1;
+    }
+
+    function handleSwapExactETHForTokens(
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external payable {
+
+        IUniswapV2Router(uniswapRouter).swapExactETHForTokens{
+            value: msg.value
+        }(
+            amountOutMin,
+            path,
+            to,
+            deadline
+        );
+
+        swapCountExactETH += 1;
     }
 
     function handleAddLiquidity(

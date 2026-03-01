@@ -24,6 +24,7 @@ MAINNET_RPC_URL=https://eth-mainnet.g.alchemy.com/v2/YOUR_API_KEY
 | `swapTokensForExactTokens` | Swap tokens to receive exact amount of output tokens |
 | `swapTokensForExactETH` | Swap tokens to receive exact amount of ETH |
 | `swapETHForExactTokens` | Swap ETH for exact amount of tokens |
+| `swapExactETHForTokens` | Swap exact amount of ETH for minimum output tokens |
 
 ### Run Commands
 
@@ -39,6 +40,9 @@ npx hardhat run scripts/swapTokensForExactETH.ts
 
 # Swap ETH for exact tokens
 npx hardhat run scripts/swapETHForExactTokens.ts
+
+# Swap exact ETH for tokens (0.5 ETH for min 500 USDC)
+npx hardhat run scripts/swapExactETHForTokens.ts
 
 # Add liquidity
 npx hardhat run scripts/addLiquidity-forking.ts
