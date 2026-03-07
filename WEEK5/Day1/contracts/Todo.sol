@@ -36,7 +36,7 @@ contract Todo {
     }
 
     function updateTask(uint8 _id, string memory _title) external{
-        for(uint8 i; i < tasks.lenght; i++){
+        for(uint8 i; i < tasks.length; i++){
             if(tasks[i].id == _id){
                 tasks[i].title = _title;
                 //should i update the timestamp also?
