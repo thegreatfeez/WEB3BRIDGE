@@ -93,4 +93,19 @@ contract EvictionVaultTest is Test {
         vm.prank(jolah);
         vault.withdraw(1 ether);
     }
+
+ function testExecuteBeforeTimelock() public {
+        bytes memory data = abi.encodeWithSelector(vault.pause.selector);
+
+        vm.prank(jolah);
+        multisig.submitTransaction(address(vault), 0, data);
+
+        vm.prank(vickish);
+        multisig.confirmTransaction(0);
+
+       
+        vm.expectRevert(MultisigWallet.TimelockActive.selector);
+        vm.prank(jolah);
+        multisig.executeTransaction(0);
+    }
 }

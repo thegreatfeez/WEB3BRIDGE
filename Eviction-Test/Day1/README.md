@@ -1,6 +1,4 @@
-A README.md file detailing the implemented fixes and the current state of the contract.
-
-# MerkleClaim and MultisigWallet Contracts
+# What I did to fix the vulnerabilities in the EvictionVault contract:
 For the `setMerkleRoot` that was previously callable by anyone, what i did was to implement an `onlyOwner` modifier to restrict access to authorized addresses only. This ensures that only the contract owner can update the Merkle root, preventing unauthorized changes.
 
 For the `emergencyWithdrawAll` function, I restricted access with the `onlyOwner` modifier and implemented a `whenPaused` modifier. This means that the emergency withdrawal can only be executed by the owner and only when the contract is paused, ensuring that it can only be used during a verified emergency.
