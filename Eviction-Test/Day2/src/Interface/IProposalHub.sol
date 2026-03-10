@@ -26,4 +26,6 @@ interface IProposalHub {
     function cancel(bytes32 proposalId) external;
 
     function getProposal(bytes32 proposalId) external view returns (Proposal memory);
+
+    function setStatus(bytes32 proposalId, Status status) external;
 }

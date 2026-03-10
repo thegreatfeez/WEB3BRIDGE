@@ -1,22 +1,14 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
 
-// this interface defines the queu(), execute(), and cancel
+// this interface defines queue(), execute(), and cancel for proposal-based timelock
 
-contract ILock {
-    function queue(
-        address target,
-        uint256 value,
-        bytes calldata data,
-        uint256 estimatedTimeOfArrival
-    ) external returns (bytes32);
+interface ILock {
+    function queue(bytes32 proposalId) external;
 
-    function execute(
-        address target,
-        uint256 value,
-        bytes calldata data,
-        uint256 estimatedTimeOfArrival
-    ) external payable returns (bytes memory);
+    function execute(bytes32 proposalId) external payable;
 
-    function cancel(bytes32 txHash) external;
+    function cancel(bytes32 proposalId) external;
+
+    function getEta(bytes32 proposalId) external view returns (uint256);
 }

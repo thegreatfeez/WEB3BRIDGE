@@ -1,20 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.30;
 
-//this interface defines the approve(), revokeApproval(), isApproved() and SignedApproval struct.
-// can isApproved() be a mapping?
+// this interface defines approve(), revokeApproval(), isAuthorized() and the SignedApproval struct.
 
 interface IAuthLayer {
     struct SignedApproval {
         address approver;
-        bytes32 operationHash;
-        uint256 timestamp;
-        bytes signature;
+        bytes32 proposalId;
+        uint256 nonce;
     }
 
-    function approve(bytes32 operationHash, bytes calldata signature) external;
+    function approve(bytes32 proposalId, uint8 v, bytes32 r, bytes32 s) external;
 
-    function revokeApproval(bytes32 operationHash) external;
+    function revokeApproval(bytes32 proposalId) external;
 
-    function isApproved(bytes32 operationHash, address approver) external view returns (bool);
+    function isAuthorized(bytes32 proposalId) external view returns (bool);
 }

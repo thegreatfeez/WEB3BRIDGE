@@ -2,21 +2,15 @@
 pragma solidity ^0.8.30;
 import "../Interface/IProposalHub.sol";
 
-/**
-Store proposals in a mapping(bytes32 => Proposal)
-use Proposal struct and Status enum from the interface 
-propose() — hashes proposal content into a proposalId, records block timestamp, sets status Pending
-cancel() — only callable by proposer or governance, sets Cancelled
-Emits events for every state change
-Use custom errors for gas effifciency.
- */
-
 contract ProposalHub is IProposalHub {
     mapping(bytes32 => Proposal) private proposals;
+    address public authLayer;
+    address public timelock;
 
     error ProposalExists(bytes32 proposalId);
     error ProposalMissing(bytes32 proposalId);
     error NotProposer(address caller);
+    error NotAuthorizedModule(address caller);
 
     event ProposalCreated(
         bytes32 proposalId,
@@ -26,6 +20,12 @@ contract ProposalHub is IProposalHub {
         uint256 value
     );
     event ProposalCancelled(bytes32 proposalId);
+    event ProposalStatusChanged(bytes32 proposalId, Status status);
+
+    constructor(address authLayer_, address timelock_) {
+        authLayer = authLayer_;
+        timelock = timelock_;
+    }
 
     function propose(address target, bytes calldata data, uint256 value) external returns (bytes32) {
         bytes32 proposalId = keccak256(abi.encode(msg.sender, target, data, value));
@@ -61,5 +61,18 @@ contract ProposalHub is IProposalHub {
 
     function getProposal(bytes32 proposalId) external view returns (Proposal memory) {
         return proposals[proposalId];
+    }
+
+    function setStatus(bytes32 proposalId, Status status) external {
+        if (msg.sender != authLayer && msg.sender != timelock) {
+            revert NotAuthorizedModule(msg.sender);
+        }
+        Proposal storage proposal = proposals[proposalId];
+        if (proposal.createdAt == 0) {
+            revert ProposalMissing(proposalId);
+        }
+
+        proposal.status = status;
+        emit ProposalStatusChanged(proposalId, status);
     }
 }
