@@ -64,4 +64,27 @@ contract TreasuryTest is Test {
         IProposalHub.Proposal memory p = proposalHub.getProposal(proposalId);
         assertEq(uint256(p.status), uint256(IProposalHub.Status.Cancelled));
     }
+
+    function testDuplicateProposalReverts() public {
+        bytes memory data = abi.encodeWithSignature("transfer(address,uint256)", ganiyat, 1 ether);
+        bytes32 proposalId = proposalHub.propose(mariam, data, 0);
+
+        vm.expectRevert(abi.encodeWithSelector(ProposalHub.ProposalExists.selector, proposalId));
+        proposalHub.propose(mariam, data, 0);
+    }
+
+    function testCancelNotProposerReverts() public {
+        bytes32 proposalId = proposalHub.propose(hafsoh, hex"1234", 0);
+
+        vm.prank(mariam);
+        vm.expectRevert(abi.encodeWithSelector(ProposalHub.NotProposer.selector, mariam));
+        proposalHub.cancel(proposalId);
+    }
+
+    function testIsAuthorizedFalseWithoutApprovals() public {
+        bytes32 proposalId = proposalHub.propose(mariam, hex"1234", 0);
+        bool ok = authLayer.isAuthorized(proposalId);
+        assertEq(ok, false);
+    }
+    
 }
