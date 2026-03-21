@@ -9,4 +9,4 @@ const OwnerModule = buildModule("StorageModule", (m) => {
   return { owner };
 });
 
-export default OwnerModule;
+export default OwnerModule
