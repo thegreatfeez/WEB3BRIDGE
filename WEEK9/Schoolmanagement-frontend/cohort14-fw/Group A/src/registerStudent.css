@@ -1,0 +1,199 @@
+.container {
+  width: 90%;
+  margin: auto;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.container .sideBar {
+  width: 25%;
+  padding: 20px;
+}
+
+.container .main {
+  width: 73%;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container .main .header {
+  width: 95%;
+  margin-bottom: 50px;
+}
+
+.container .main .header h1 {
+  font-weight: 600;
+  font-size: 34px;
+  color: #1f2937;
+  width: 85%;
+}
+
+.container .main .header .headerBtn {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container .main .header .headerBtn p {
+  width: 60%;
+  font-size: 14px;
+  color: #555;
+}
+
+.container .main .header .headerBtn .submit-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.container .main .header .headerBtn .submit-btn:hover {
+  background-color: #0056b3;
+}
+
+.container .main .search-cont {
+  width: 85%;
+  border-radius: 10px;
+  margin-bottom: 50px;
+  padding: 15px;
+  background-color: rgb(247, 247, 248);
+}
+
+.container .main .search-cont .search {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.container .main .search-cont .search input[type="text"] {
+  padding: 7px;
+  border: none;
+  background-color: rgb(255, 254, 252);
+  border-radius: 10px;
+  width: 70%;
+  outline: none;
+}
+
+.container .main .search-cont .search span {
+  font-weight: 600;
+  color: #333;
+}
+
+.container .main .displayStudent {
+  width: 100%;
+  border-radius: 10px;
+  background-color: rgb(247, 247, 248);
+}
+
+.container .main .displayStudent .title {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  border-radius: 10px 10px 0 0;
+  background-color: rgb(205, 205, 206);
+  color: #333;
+  font-size: 14px;
+  padding: 8px;
+  margin: 0 0 15px 0;
+}
+
+.container .main .displayStudent .title span {
+  width: 16%;
+}
+
+.container .main .displayStudent .title .title1 {
+  width: 45%;
+}
+
+.container .main .displayStudent .details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 5px;
+  width: 100%;
+}
+
+.container .main .displayStudent .details .student {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.container .main .displayStudent .details .student .about {
+  display: flex;
+  flex-direction: column;
+}
+
+.container .main .displayStudent .details .student .about .det {
+  display: flex;
+  flex-direction: column;
+}
+
+.container .main .displayStudent .details .student .status {
+  padding: 3px;
+  height: max-content;
+  margin-right: 10px;
+  border-radius: 10px;
+}
+
+.container .main .displayStudent .footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.container .main form {
+  width: 85%;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: rgb(247, 247, 248);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 20px;
+}
+
+.container .main form .inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.container .main form .inputGroup label {
+  font-size: 14px;
+  color: #333;
+}
+
+.container .main form .inputGroup input {
+  padding: 7px;
+  border: none;
+  background-color: rgb(255, 254, 252);
+  border-radius: 10px;
+  width: 100%;
+  outline: none;
+}
+
+.container .main form .select {
+  display: flex;
+  flex-direction: row;
+  width: 60%;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.container .main form .select select {
+  padding: 7px;
+  border: none;
+  background-color: rgb(255, 254, 252);
+  border-radius: 10px;
+  width: 100%;
+  outline: none;
+}
