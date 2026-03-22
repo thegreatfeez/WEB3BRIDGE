@@ -1,7 +1,7 @@
 import {FiShield,FiBox,FiCopy,FiExternalLink,FiCheckCircle,FiActivity} from 'react-icons/fi'
 import Navbar from '../components/Navbar'
 import { useToken } from "../hooks/useToken";
-import { useReadToken } from '../hooks/specific/useReadToken';
+import { useTokenContext } from '../context/TokenContext'
 import { formatUnits } from 'ethers';
 import { formatAddress } from '../utils';
 
@@ -16,7 +16,7 @@ function AdminPage({ onNavigate }: AdminPageProps) {
     error,
     handleMintToken,
   } = useToken();
-  const { totalSupply, maxSupply, owner, mintHistory } = useReadToken();
+  const { totalSupply, maxSupply, owner, mintHistory } = useTokenContext();
   const totalSupplyDisplay = totalSupply ? Number(formatUnits(totalSupply, 18)).toLocaleString() : '--';
   const maxSupplyDisplay = maxSupply ? Number(formatUnits(maxSupply, 18)).toLocaleString() : '--';
   const contractAddress = import.meta.env.VITE_TODO_CONTRACT_ADDRESS as string | undefined;
@@ -24,7 +24,7 @@ function AdminPage({ onNavigate }: AdminPageProps) {
   return (
     <div className="min-h-screen bg-[#f7f9fc] text-slate-900">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_55%)]" />
-      <Navbar activePage="admin" onNavigate={onNavigate} />
+      <Navbar onNavigate={onNavigate} />
       <main className="mx-auto w-full max-w-6xl px-6 py-10">
         <div className="mb-8 flex items-center justify-between">
           <div>

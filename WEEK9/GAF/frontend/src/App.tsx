@@ -3,11 +3,11 @@ import 'react-toastify/dist/ReactToastify.css'
 import AdminPage from './pages/AdminPage'
 import UserDashboardPage from './pages/UserDashboardPage'
 import { useAppKitAccount } from '@reown/appkit/react'
-import { useReadToken } from './hooks/specific/useReadToken'
+import { TokenProvider, useTokenContext } from './context/TokenContext'
 
-function App() {
+function AppInner() {
   const { address } = useAppKitAccount()
-  const { owner } = useReadToken()
+  const { owner } = useTokenContext()
 
   const isAdmin = !!(
     address &&
@@ -25,6 +25,14 @@ function App() {
       )}
       <ToastContainer position="top-right" autoClose={3000} />
     </>
+  )
+}
+
+function App() {
+  return (
+    <TokenProvider>
+      <AppInner />
+    </TokenProvider>
   )
 }
 

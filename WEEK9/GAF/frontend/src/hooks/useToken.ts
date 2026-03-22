@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useWriteToken } from './specific/useWriteToken';
 import { isAddress, parseUnits } from "ethers";
+import { useTokenContext } from "../context/TokenContext";
 
 export interface Mint{
     mintAmount: number;
@@ -16,8 +17,7 @@ export const useToken = () => {
     const[transferError, setTransferError] = useState("");
 
     const { mintToken, requestToken, transferToken } = useWriteToken();
-
-    
+    const { refresh } = useTokenContext();
 
     const handleMintToken = useCallback(async()=>{
         const amountValue = inputAmount.trim();
@@ -50,7 +50,8 @@ export const useToken = () => {
         }
 
         setInputAmount("");
-    },[inputAmount, mintToken])
+        await refresh();
+    },[inputAmount, mintToken, refresh])
 
     const handleRequestToken = useCallback(async()=>{
         const result = await requestToken();
@@ -68,7 +69,9 @@ export const useToken = () => {
         } else {
             toast.success("Tokens claimed successfully!");
         }
-    }, [requestToken])
+
+        await refresh();
+    }, [requestToken, refresh])
 
     const handleTransferToken = useCallback(async()=>{
         const amountValue = transferAmount.trim();
@@ -112,7 +115,8 @@ export const useToken = () => {
 
         setTransferAmount("");
         setTransferRecipient("");
-    }, [transferAmount, transferRecipient, transferToken])
+        await refresh();
+    }, [transferAmount, transferRecipient, transferToken, refresh])
 
     return {
         inputAmount,

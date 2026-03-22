@@ -11,7 +11,8 @@ import {
 } from 'react-icons/fi'
 import Navbar from '../components/Navbar'
 import { useToken } from '../hooks/useToken'
-import { useReadToken } from '../hooks/specific/useReadToken'
+
+import { useTokenContext } from '../context/TokenContext'
 import { formatUnits } from 'ethers'
 import { useAppKitAccount } from '@reown/appkit/react'
 import { formatAddress } from '../utils'
@@ -38,7 +39,7 @@ function UserDashboardPage({ onNavigate }: UserDashboardPageProps) {
     handleTransferToken,
   } = useToken();
   const { address } = useAppKitAccount();
-  const { totalSupply, claimAmount, cooldown, balance, nextClaimTime } = useReadToken();
+  const { totalSupply, claimAmount, cooldown, balance, nextClaimTime } = useTokenContext();
 
   const totalSupplyDisplay = totalSupply ? Number(formatUnits(totalSupply, 18)).toLocaleString() : '--';
   const claimAmountDisplay = claimAmount ? Number(formatUnits(claimAmount, 18)).toLocaleString() : '--';
@@ -101,6 +102,7 @@ function UserDashboardPage({ onNavigate }: UserDashboardPageProps) {
   return (
     <div className="min-h-screen bg-[#f7f9fc] text-slate-900">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_55%)]" />
+      <Navbar onNavigate={onNavigate} />
 
       <main className="mx-auto w-full max-w-6xl px-6 py-10">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,_1.2fr)_minmax(0,_0.8fr)]">
