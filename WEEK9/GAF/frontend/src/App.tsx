@@ -1,18 +1,27 @@
-import { useState } from 'react'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import AdminPage from './pages/AdminPage'
 import UserDashboardPage from './pages/UserDashboardPage'
+import { useAppKitAccount } from '@reown/appkit/react'
+import { useReadToken } from './hooks/specific/useReadToken'
 
 function App() {
-  const [page, setPage] = useState<'user' | 'admin'>('user')
+  const { address } = useAppKitAccount()
+  const { owner } = useReadToken()
+
+  const isAdmin = !!(
+    address &&
+    owner &&
+    address.toLowerCase() === owner.toLowerCase()
+  )
+  const noop = () => {}
 
   return (
     <>
-      {page === 'user' ? (
-        <UserDashboardPage onNavigate={setPage} />
+      {isAdmin ? (
+        <AdminPage onNavigate={noop} />
       ) : (
-        <AdminPage onNavigate={setPage} />
+        <UserDashboardPage onNavigate={noop} />
       )}
       <ToastContainer position="top-right" autoClose={3000} />
     </>
