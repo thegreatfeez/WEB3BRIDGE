@@ -16,3 +16,17 @@ body {
 * {
   box-sizing: border-box;
 }
+
+button {
+  cursor: pointer;
+  transition: transform 150ms ease, filter 150ms ease;
+}
+
+button:hover {
+  filter: brightness(0.96);
+  transform: translateY(-1px);
+}
+
+.font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
