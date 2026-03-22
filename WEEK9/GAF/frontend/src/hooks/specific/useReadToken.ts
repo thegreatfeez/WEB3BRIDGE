@@ -87,6 +87,7 @@ export const useReadToken = (): TokenReadState => {
           .map((log) => {
             try {
               const parsed = GAFContract.interface.parseLog(log);
+              if (!parsed) return null;
               return {
                 recipient: parsed.args[1] as string,
                 amount: parsed.args[2] as bigint,
@@ -111,6 +112,7 @@ export const useReadToken = (): TokenReadState => {
           .map((log) => {
             try {
               const parsed = GAFContract.interface.parseLog(log);
+              if (!parsed) return null;
               return {
                 recipient: parsed.args[0] as string,
                 amount: parsed.args[1] as bigint,

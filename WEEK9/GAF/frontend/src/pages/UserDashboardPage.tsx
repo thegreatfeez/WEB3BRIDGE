@@ -3,7 +3,6 @@ import {
   FiCheckCircle,
   FiClock,
   FiLayers,
-  FiLock,
   FiTrendingUp,
   FiBox,
   FiUser,
