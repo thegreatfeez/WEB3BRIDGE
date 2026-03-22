@@ -6,7 +6,8 @@ import {
   FiTrendingUp,
   FiBox,
   FiUser,
-  FiActivity 
+  FiActivity,
+  FiPlusCircle,
 } from 'react-icons/fi'
 import Navbar from '../components/Navbar'
 import { useToken } from '../hooks/useToken'
@@ -51,11 +52,14 @@ function UserDashboardPage({ onNavigate }: UserDashboardPageProps) {
     }, 1000);
     return () => window.clearInterval(intervalId);
   }, []);
+
   const nextClaimSeconds = nextClaimTime ? Number(nextClaimTime) : null;
   const remainingSeconds =
     nextClaimSeconds && nextClaimSeconds > nowSeconds
       ? nextClaimSeconds - nowSeconds
       : 0;
+
+  const canClaim = remainingSeconds === 0;
 
   const formatCountdown = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -75,23 +79,50 @@ function UserDashboardPage({ onNavigate }: UserDashboardPageProps) {
       : 'Available now';
 
   const balanceDisplay = balance ? Number(formatUnits(balance, 18)).toLocaleString() : '0';
+
+  const handleAddToken = async () => {
+    try {
+      await (window.ethereum as any).request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: import.meta.env.VITE_TODO_CONTRACT_ADDRESS,
+            symbol: 'GFT',
+            decimals: 18,
+          },
+        },
+      });
+    } catch (error) {
+      console.error('Failed to add token:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f7f9fc] text-slate-900">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.08),_transparent_55%)]" />
 
-      <Navbar activePage="user" onNavigate={onNavigate} />
-
       <main className="mx-auto w-full max-w-6xl px-6 py-10">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,_1.2fr)_minmax(0,_0.8fr)]">
           <section className="space-y-8">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100 text-purple-600">
-                <FiBox />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100 text-purple-600">
+                  <FiBox />
+                </div>
+                <div>
+                  <h1 className="font-display text-3xl font-semibold">GAFToken</h1>
+                  <p className="text-sm text-slate-500">GFT · ERC-20 Asset</p>
+                </div>
               </div>
-              <div>
-                <h1 className="font-display text-3xl font-semibold">GAFToken</h1>
-                <p className="text-sm text-slate-500">GFT · ERC-20 Asset</p>
-              </div>
+              <button
+                type="button"
+                onClick={handleAddToken}
+                className="flex items-center gap-2 rounded-2xl border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"
+              >
+                <FiPlusCircle size={15} />
+                Add GFT to Wallet
+              </button>
             </div>
 
             <div className="grid gap-5 md:grid-cols-2">
@@ -134,10 +165,17 @@ function UserDashboardPage({ onNavigate }: UserDashboardPageProps) {
               </p>
               <button
                 type="button"
-                onClick={handleRequestToken}
-                className="mt-6 rounded-2xl bg-gradient-to-r from-blue-700 via-blue-600 to-sky-400 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-blue-200"
+                onClick={canClaim ? handleRequestToken : undefined}
+                disabled={!canClaim}
+                className={`mt-6 rounded-2xl px-8 py-4 text-sm font-semibold text-white shadow-lg transition-all duration-200 ${
+                  canClaim
+                    ? 'bg-gradient-to-r from-blue-700 via-blue-600 to-sky-400 shadow-blue-200 cursor-pointer'
+                    : 'bg-slate-300 shadow-slate-100 cursor-not-allowed opacity-60'
+                }`}
               >
-                Request {claimAmountDisplay} GFT
+                {canClaim
+                  ? `Request ${claimAmountDisplay} GFT`
+                  : `Available in ${formatCountdown(remainingSeconds)}`}
               </button>
               <p className="mt-3 text-xs text-slate-400">
                 Estimated Transaction Fee: 0.00012 ETH
